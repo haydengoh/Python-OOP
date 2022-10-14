@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections import Counter
 
 
 class EquipmentRuleException(Exception):
@@ -294,7 +295,7 @@ class GolfSet:
                 # store in _clubs
                 self._clubs[newList[0][1]] = [
                     newList[0][2], newList[0][3], newList[0][4]]
-            
+
             infile.close()
 
     @property
@@ -306,7 +307,7 @@ class GolfSet:
         """
         sum of all clubs in the 3 categories of golf clubs.
         """
-        pass
+        return Counter(self._clubs.keys())
 
     @classmethod
     def getClubType(cls):
@@ -318,8 +319,9 @@ class GolfSet:
 
 def main():
     g = GolfSet('A20', 'Marvin', False)
-
     print(g)
 
+    print(g.numberOfClubs)
 
-main()
+
+# main()
