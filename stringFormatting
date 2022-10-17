@@ -1,0 +1,147 @@
+def stringFormatting():
+    # alignment formatting
+    value = "ALIGN"
+    text1 = "I am {:<10s} left".format(value)
+    text2 = "I am {:>10s} right".format(value)
+    text3 = "I am {:^10s} center".format(value)
+    print(text1)
+    print(text2)
+    print(text3)
+
+    # number formatting with alignment
+    value = 1254.6587
+    print("I am {:<10.2f} left".format(value))
+    print("I am {:>10.2f} right".format(value))
+    print("I am {:^10.2f} center".format(value))
+
+    # padding with 0
+    print("I am {:<010.2f} left".format(value))
+    print("I am {:>010.2f} right".format(value))
+    print("I am {:^010.2f} center".format(value))
+
+    # number formatting with alignment, with thousand separator
+    print("I am {:<10,.2f} left".format(value))
+    print("I am {:>10,.2f} right".format(value))
+    print("I am {:^10,.2f} center".format(value))
+
+    # number formatting with alignment, with $ and thousand separator
+    value = 12546587
+    print("I am ${:<15,d} left".format(value))
+    print("I am ${:>15,d} right".format(value))
+    print("I am ${:^15,d} center".format(value))
+
+    totalAmount = 12345.678
+    print("Total amount: ${:>10,.2f} only".format(totalAmount))
+    # > for right align
+    # 10 define the width
+    # .2f define 2 decimal spaces
+
+stringFormatting()
+
+def fStringFormatting():
+    # alignment formatting
+    value = "ALIGN"
+    text1 = f"I am {value:<10s} left"
+    text2 = f"I am {value:>10s} right"
+    text3 = f"I am {value:^10s} center"
+    print(text1)
+    print(text2)
+    print(text3)
+
+    # number formatting with alignment
+    value = 1254.6587
+    print(f"I am {value:<10.2f} left")
+    print(f"I am {value:>10.2f} right")
+    print(f"I am {value:^10.2f} center")
+
+    # padding with 0
+    print(f"I am {value:<010.2f} left")
+    print(f"I am {value:>010.2f} right")
+    print(f"I am {value:^010.2f} center")
+
+    # number formatting with alignment, with thousand separator
+    print(f"I am {value:<10,.2f} left")
+    print(f"I am {value:>10,.2f} right")
+    print(f"I am {value:^10,.2f} center")
+
+    # number formatting with alignment, with $ and thousand separator
+    value = 12546587
+    print(f"I am ${value:<15,d} left")
+    print(f"I am ${value:>15,d} right")
+    print(f"I am ${value:^15,d} center")
+
+    totalAmount = 12345.678
+    print(f"Total amount: ${totalAmount:>10,.2f} only")
+    # > for right align
+    # 10 define the width
+    # .2f define 2 decimal spaces
+
+fStringFormatting()
+
+def main():
+    # String
+    name = "AliBaBa"
+    #       0123456
+    #       7654321-
+    print(len(name))
+    print(name[0],name[1],name[2],name[3],name[4],name[5], sep="+")
+    print(name[-1],name[-2],name[-3],name[-4],name[-5],name[-6], sep="-")
+
+    # what are we doing here??
+    print(name[3],name[4],name[5],name[6], sep="")
+
+    # Slicing: [<start>:<end>:<increment>]
+
+    # from pos 3 to 6, EXCLUDING 7, increment is defaulted to 1
+    print("name[3:7] ->", name[3:7])
+
+    # from pos 0 to 5, EXCLUDING 6, increment is defaulted to 1
+    print("name[0:6] ->", name[0:6])
+
+    # from pos 0 to 5, EXCLUDING 6, increment is defaulted to 2
+    print("name[0:6:2] ->", name[0:6:2])
+
+    # from pos 3 to the end
+    print("name[3:] ->", name[3:])
+
+    # reverse pos 6 to 2, EXCLUDING pos 1
+    print("name[6:1:-1] ->", name[6:1:-1])
+
+    print("name[::-1] ->", name[::-1])
+
+    result = "hello" + "hell"  # not -
+    print(result)
+                                       # 01234
+    name = input("Enter your name: ")  # kevin
+    print(name[-1])
+
+    name = "AliBaBa"
+    print( "capitalize name =", name.capitalize() )
+    print( "upper name =", name.upper() )
+    print( "lower name =", name.lower() )
+    print( "title name =", name.title() )
+    print( "This is |", name.center(15), "| centered" )
+    print( "This is |", name.rjust(15), "| right-justified" )
+    print( "This is |", name.ljust(15), "| left-justified" )
+    print( "No of <b> =", name.count('b') )
+    print( "No of <Ba> =", name.count('Ba') )
+    print( "B is located at position", name.find('B') )
+    print( "B right-most position is", name.rfind('B') )
+    print( "Replacing <Ba> with <Ca> =", name.replace("Ba", "Ca") )
+    print( "name is now:", name)
+    name = name.replace("Ba", "Ca")
+    print( "name is now:", name)
+    print(name)
+
+    text = "{1} {0} won ${2}" .format("Smith", "Mr.", 100)
+    print(text)
+
+    text = "{} {} won ${}" .format("Mr.", "Smith", 100)
+    print(text)
+
+    text = "{1} {0} won ${2}, and {1} {0} will give away the one to all people who suranme {0}" .format("Smith", "Mr.", 100)
+    print(text)
+
+    text = "{} {} won ${}, and {} {} will give away the one to all people who suranme {}" .format("Mr.", "Smith", 100, "Mr.", "Smith", "Smith")
+    print(text)
+main()
