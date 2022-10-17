@@ -1,0 +1,51 @@
+class Sample:
+    _NEXT_ID = 1
+
+    def __init__(self, aValue, bValue):
+        """ constructor that execute when an object is created """
+        self._aaa = aValue
+        self._bbb = bValue
+        self._collection = { }  # [ ]
+        self._sampleID = Sample._NEXT_ID
+        sample._NEXT_ID += 1    # increase 1 after creating one object
+
+    @classmethod
+    def getNextID(cls):
+        return cls._NEXT_ID
+
+    @property  # accessor / getter method
+    def aaa(self):
+        return self._aaa
+
+    @aaa.setter
+    def aaa(self, newValue):
+        self._aaa = newValue
+
+    @property  # accessor / getter method
+    def bbb(self):
+        return self._bbb
+
+    @bbb.setter
+    def bbb(self, newValue):
+        self._bbb = newValue
+
+    def otherMethods(self, parameter1=10):
+        """ comments """
+        pass
+
+    def __str__(self): # if not using collection
+        """ string representation of the object """
+        return "ID: {}   aaa: {}   bbb: {}".format(self._sampleID, self.aaa, self.bbb)
+
+    def __str__(self): # if using collection
+        """ string representation of the object """
+        text =  "ID: {}   aaa: {}   bbb: {}\n".format(self._sampleID, self.aaa, self.bbb)
+        # for oneItem in self._collection:          # for list
+        for oneItem in self._collection.values():
+            text = text + oneItem.__str__() + "\n"
+        return text
+
+    def __str__(self): # if using list and need to sort
+        listItems = [str(c) for c in self._collection]
+        listItems.sort()
+        return "ID: {}   aaa: {}   bbb: {}\n{}".format(self._sampleID, self.aaa, self.bbb, '\n'.join(listItems))
