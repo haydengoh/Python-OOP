@@ -1,6 +1,7 @@
 import os
 from abc import ABC, abstractmethod
-from collections import Counter
+
+from myLib import getIntegerRange, getCharSet
 
 
 class EquipmentRuleException(Exception):
@@ -403,7 +404,112 @@ class GolfSet:
         return text
 
 
+def menuOption():
+    print("Golfit Main Menu")
+    print("==========================")
+    print("1. Build a golf set")
+    print("2. Load a golf set")
+    print("0. Quit")
+    option = getIntegerRange("Enter option: ", 0, 2)
+    return option
+
+
+def buildGolfSet():
+    golferID = input('Enter golfer\'s ID: ')
+    name = input('Enter golfer\'s name: ')
+    golfSet = GolfSet(golferID, name, True)
+    print('*********************************************')
+    print('Recommendation:\n'
+          '- Build the set from longest to shortest club\n'
+          '- i.e., from Driver to Putter')
+    print('*********************************************\n')
+
+    print('{} {}'.format(golferID, name))
+    print('No of clubs: {}\n\n'.format(golfSet.numberOfClubs))
+
+    choice = subMenu(name)
+    if choice == '1':
+        addClub(name, golfSet)
+
+
+def loadGolfSet():
+    golferID = input('Enter golfer\'s ID: ')
+    name = input('Enter golfer\'s name: ')
+    golfSet = GolfSet(golferID, name, False)
+    print('{} {}'.format(golferID, name))
+    print(golfSet.getGolfSetDetails())
+    subMenu(name)
+
+
+def subMenu(name):
+    print('Club Fitting for {}'.format(name))
+    print('==========================')
+    print('1. Add a club')
+    print('2. Remove a club')
+    print('0. Back to Main Menu')
+    option = getIntegerRange("Enter choice: ", 0, 2)
+    return option
+
+
+def addClub(name, golfSet):
+    clubType = input('Which club type to add: '.title())
+    label = input('Enter the new club label: ')
+    # Club Head
+    loft = input('Enter clubhead loft: ')
+    headWeight = input('Enter clubhead weight: ')
+    if clubType == 'Wood':
+        headSize = input('Enter wood size: ')
+    elif clubType == 'Iron':
+        headMaterial = input('Enter Iron material: ')
+    else:
+        headStyle = input('Enter Putter style: ')
+    # Shaft
+    length = input('Enter length of shaft: ')
+    shaftWeight = input('Enter weight of shaft: ')
+    shaftMaterial = input('Enter shaft material: ')
+    flex = input('Enter shaft flex: ')
+    # Grip
+    diameter = input('Enter diameter of grip: ')
+    gripWeight = input('Enter weight of grip: ')
+    gripMaterial = input('Enter grip material ')
+
+    # Create Object
+    if clubType == 'Wood':
+        clubHead = WoodHead(loft, headWeight, headSize)
+    elif clubType == 'Iron':
+        clubHead = IronHead(loft, headWeight, headMaterial)
+    else:
+        clubHead = PutterHead(loft, headWeight, headStyle)
+    shaft = Shaft(length, shaftWeight, shaftMaterial, flex)
+    grip = Grip(diameter, gripWeight, gripMaterial)
+    newClub = Club(label, clubHead, shaft, grip)
+
+    # add to golfer's set
+    """
+    Display any error or confirmation messages for this add request, then return to
+the sub menu.
+    """
+    if golfSet.add(clubType, newClub):
+        print('New Club added\n\n')
+        print(golfSet.getGolfSetDetails())
+        subMenu(name)
+    else:
+        print('Error occur!')
+        subMenu(name)
+
+
 def main():
+    while True:
+        option = menuOption()
+        if option == 0:
+            break
+        elif option == 1:
+            buildGolfSet()
+        else:
+            loadGolfSet()
+    print("bye")
+
+    """
     g = GolfSet('A20', 'Marvin', False)
     print(g)
 
@@ -436,8 +542,7 @@ def main():
     # getGolfSetDetails()
     print('AFTER getGolfSetDetails()..')
     print(g.getGolfSetDetails())
-
-
+    """
 
     """
     # Question 1
