@@ -1,0 +1,86 @@
+def listForFun():
+    # list
+    myNumberList = [1, 2, 3, 4]
+    myTextList = ['a', 'b', 'c']
+
+    # using index
+    for i in range(len(myNumberList)):  # range(4)
+        print(myNumberList[i])
+
+    # using element
+    for element in myNumberList:
+        print("use for element - ", element)
+
+    for element in myTextList:
+        print(element)
+
+    # combining = adding
+    myNumTextList = myNumberList + myTextList
+    print(myNumTextList)
+
+    # list methods
+    myNumTextList.append('NEW')  # add to the back
+    print(myNumTextList)
+
+    myNumTextList.insert(3, '9')  # add at position 3
+    print(myNumTextList)
+
+    print("Address of myNumTextList:", id(myNumTextList))
+    print("Address of myNumTextList[2]:", id(myNumTextList[2]))
+    print("Before change = ", myNumTextList[2])
+    myNumTextList[2] = '9'  # change value of pos[2]
+    print("After change = ", myNumTextList[2])
+
+    print("New Address of myNumTextList[2]:", id(myNumTextList[2]))
+    print("Address of myNumTextList:", id(myNumTextList))  # same, no change
+    print(myNumTextList)
+
+    myNumTextList.remove('9')  # only remove one '9'
+    print(myNumTextList)
+    x = myNumTextList.pop(0)  # pop first item
+    print(myNumTextList)
+    print("Item popped is:", x)
+
+    # zipping all the list up
+    for a, b in zip(myNumberList, myTextList):
+        print(a, b)
+
+    print(type(zip(myNumberList, myTextList)))
+
+
+
+def tupleForFun():
+    # tuple
+    myNumberTuple = (4, 5, 6, 7)
+    myTextTuple = ('c', 'd', 'e', 'f')
+
+    # using index
+    for i in range(len(myNumberTuple)):
+        print(myNumberTuple[i])
+
+    # using element
+    for element in myNumberTuple:
+        print(element)
+
+    for element in myTextTuple:
+        print(element)
+
+    # combining = adding
+    myNumTextTuple = myNumberTuple + myTextTuple
+    print(myNumTextTuple)
+    print(type(myNumTextTuple))
+
+    # tuple methods
+    """
+    myNumTextTuple.append('NEW')  # ERROR
+    myNumTextTuple.insert(3, '9')  # ERROR
+    myNumTextTuple[2] = '9'  # ERROR
+    myNumTextTuple.remove('9')  # ERROR
+    """
+    # list
+    myNumberList = [1, 2, 3, 4]
+    myTextList = ['a', 'b', 'c']
+
+    # zipping all the list, tuple up
+    for a, b, c, d in zip(myNumberList, myTextList, myNumberTuple, myTextTuple):
+        print(a, b, c, d)
