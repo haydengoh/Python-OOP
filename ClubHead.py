@@ -1,10 +1,11 @@
+import os
 from abc import ABC, abstractmethod
 from collections import Counter
 
 
 class EquipmentRuleException(Exception):
     """
-    When the application encounters an equipment rule violation, 
+    When the application encounters an equipment rule violation,
 an exception from this class is raised.
     """
     pass
@@ -46,11 +47,11 @@ class WoodHead(ClubHead):
         """
         The height is calculated by dividing the size by 400.
         """
-        return self._size / 400
+        return int(self._size) / 400
 
     def __str__(self):
         """
-        returns a string representation of a WoodHead object, in the 
+        returns a string representation of a WoodHead object, in the
 following order: “Wood”, loft, weight, size
         """
         return "Wood,{},{}".format(super().__str__(), self._size)
@@ -91,17 +92,6 @@ Otherwise, the method returns 0.5 inch.
     def __str__(self):
         return "Putter,{},{}".format(super().__str__(), self._style)
 
-# 1c
-
-
-def main():
-    p = PutterHead(3.5, 365, 'Blade')
-    print(p, p.getHeight())
-    i = IronHead(37.5, 285, 'Forged')
-    print(i, i.getHeight())
-    w = WoodHead(9.5, 206, 450)
-    print(w, w.getHeight())
-
 
 class Shaft:
     def __init__(self, length, weight, material, flex):
@@ -129,17 +119,17 @@ class Shaft:
     def __str__(self):
         """
         returns a string representation of a Shaft object, in the
-following order: length, weight, material, flex        
+following order: length, weight, material, flex
         """
         return "{},{},{},{}".format(self.length, self.weight, self._material, self.flex)
 
 
 class Grip:
     def __init__(self, diameter, weight, material):
-        if diameter == 0.6 or diameter == 0.58:
+        if float(diameter) == 0.6 or float(diameter) == 0.58:
             self._diameter = diameter
         self._weight = weight
-        if material == 'RUBBER' or material == 'LEATHER' or material == 'SYNTHETIC':
+        if material == 'Rubber' or material == 'Leather' or material == 'Synthetic':
             self._material = material
 
     @property  # accessor / getter method
@@ -161,6 +151,8 @@ order: diameter, weight, material
 class Club:
 
     def __init__(self, label, head: ClubHead, shaft: Shaft, grip: Grip):
+        # labelling or numbering in uppercase, to help golfers identify the club.
+        # For example, “7-IRON”, “3-WOOD” and “4-HYBRID”.
         self._label = label
         self._head = head
         self._shaft = shaft
@@ -170,10 +162,10 @@ class Club:
         2. Assembled club length must be within 18 to 48 inches.
         Otherwise, raise EquipmentRuleException with appropriate message
         """
-        if head.weight < (shaft.weight + grip.weight):
+        if int(head.weight) < (int(shaft.weight) + int(grip.weight)):
             raise EquipmentRuleException(
                 'Club Weight must be more than shaft & grip weight!')
-        if 18 > (shaft.length + head.getHeight()) > 48:
+        if 18 > (float(shaft.length) + float(head.getHeight())) > 48:
             raise EquipmentRuleException(
                 'Assembled club length must be within 18 to 48 inches')
 
@@ -196,7 +188,7 @@ class Club:
         """
         Length of the club is the length of the shaft and the height of the clubhead.
         """
-        return self._shaft.length + self._head.getHeight()
+        return float(self._shaft.length) + float(self._head.getHeight())
 
     @property  # accessor / getter method
     def weight(self):
@@ -207,9 +199,9 @@ class Club:
 
     def changeGrip(self, newGrip: Grip):
         """
-        The changeGrip method replaces the instance variable _grip 
-with the given parameter Grip object, provided that the weight of head must be 
-more than the combined weight of the shaft and this new grip. Otherwise, raise 
+        The changeGrip method replaces the instance variable _grip
+with the given parameter Grip object, provided that the weight of head must be
+more than the combined weight of the shaft and this new grip. Otherwise, raise
 EquipmentRuleException with appropriate message.
         """
         if self._head.weight > (self._shaft.weight + newGrip.weight):
@@ -222,7 +214,9 @@ EquipmentRuleException with appropriate message.
         """
         getDetails method returns a string presentation of the club’s label, loft, length, flex, and weight
         """
-        return "Club: {}\t Loft: {}\t Length: {}in\t Flex: {}\t Weight: {}g".format(self._label, self.loft, self.length, self.flex, self.weight)
+        return "Club: {:10} Loft: {:4} Length: {:6}in Flex: {:1} Weight: {:10}g".format(self._label, self.loft,
+                                                                                        self.length, self.flex,
+                                                                                        self.weight)
 
     def __str__(self):
         """
@@ -230,13 +224,214 @@ EquipmentRuleException with appropriate message.
         """
         return "{},{},{},{}".format(self._label, self._head, self._shaft, self._grip)
 
-# 2d
+
+class GolfSet:
+    _CLUBTYPE = ['Wood', 'Iron', 'Putter']
+
+    def __init__(self, ownerID, owner, newSet):
+        self._ownerID = ownerID
+        self._owner = owner
+        self._clubs = {"Wood": [], "Iron": [], "Putter": []}
+
+        if newSet is True:
+            return
+        else:
+            fileName = r'C:\Users\HAYDEN.GOH\IdeaProjects\HelloPython\TMA\A20-Marvin.txt'
+            if not os.path.isfile(fileName):
+                raise EquipmentRuleException('File is not file!')
+
+            infile = open(fileName, 'r')
+            for oneLine in infile:
+                newList = []
+                newList.append(oneLine.rstrip('\n').split(','))
+                """
+                DRIVER,Wood,10.5,203,450,44.25,68,Graphite,R,0.6,62,Rubber
+                5-WOOD,[Wood,17.5,240,280],[41.5,85,Graphite,R],[0.6,62,Rubber]
+                5-IRON,[Iron,26.5,262,Cast],[38.0,102,Steel,S],[0.6,62,Rubber]
+                ODYSSEY#7,[Putter,3.0,365,Mallet],[34.0,120,Steel,S],[0.6,62,Rubber]
+                
+                # TEST
+                print(newList[0][2], newList[0][3], newList[0][4])
+                print(newList[0][5], newList[0][6], newList[0][7], newList[0][8])
+                print(newList[0][9], newList[0][10], newList[0][11])
+                """
+                label = newList[0][0]
+                category = newList[0][1]
+                if category == 'Wood':
+                    # WoodHead(loft, weight, size)
+                    head = WoodHead(newList[0][2], newList[0][3], newList[0][4])
+                elif category == 'Iron':
+                    # IronHead(loft, weight, material)
+                    head = IronHead(newList[0][2], newList[0][3], newList[0][4])
+                else:
+                    # PutterHead(loft, weight, style)
+                    head = PutterHead(newList[0][2], newList[0][3], newList[0][4])
+
+                # Shaft(length, weight, material, flex)
+                shaft = Shaft(newList[0][5], newList[0][6], newList[0][7], newList[0][8])
+                # Grip(diameter, weight, material)
+                grip = Grip(newList[0][9], newList[0][10], newList[0][11])
+                # Club(label, head: ClubHead, shaft: Shaft, grip: Grip)
+                club = Club(label, head, shaft, grip)
+
+                # print(club.getDetails())
+
+                # if category in self._clubs:
+                #     self._clubs[category].append(club)
+
+                # populate Club objects into _clubs
+                self._clubs[category] += [club]
+
+            infile.close()
+            # print(self._clubs)
+
+    @classmethod
+    def getClubType(cls):
+        """
+        class method getClubType that returns the 3 categories in a List.
+        """
+        return cls._CLUBTYPE
+
+    @property
+    def owner(self):
+        return self._owner
+
+    @property
+    def numberOfClubs(self):
+        """
+        sum of all clubs in the 3 categories of golf clubs.
+        """
+        counter = 0
+        for oneValue in self._clubs.values():
+            for i in oneValue:
+                counter += 1
+        return counter
+
+    def add(self, clubType, newClub: Club):
+        # The maximum number of clubs in a golf set is 14.
+        if self.numberOfClubs >= 14:
+            raise EquipmentRuleException('Maximum number of clubs in a golf set is 14!')
+
+        # Each club label should be unique, within the golf set.
+        newLabel = newClub._label
+        for oneClub in self._clubs[clubType]:
+            currentLabel = oneClub._label
+            if newLabel == currentLabel:
+                raise EquipmentRuleException('Label should be unique!')
+
+        # The new Club’s shaft flex must match those in the same clubType category.
+        newFlex = newClub.flex
+        for oneClub in self._clubs[clubType]:
+            currentFlex = oneClub.flex
+            if newFlex is not currentFlex:
+                raise EquipmentRuleException('New flex must match those in the same clubType category!')
+
+        # Within the same clubType category, there should not be clubs having the same loft.
+        newLoft = newClub.loft
+        for oneClub in self._clubs[clubType]:
+            currentLoft = oneClub.loft
+            if newLoft == currentLoft:
+                raise EquipmentRuleException('Should not have same loft within same clubType category!')
+
+        """
+        Within the same clubType category,
+        the newClub must not be longer than the next club with lower loft.
+        E.g., 8-Iron (37.0 degree) must not be longer than 7-Iron (33.5 degree).
+        &&
+        the newClub must not be shorter than the next club with higher loft.
+        E.g., 8-Iron (37.0 degree) must not be shorter than 9-Iron (40.5 degree).
+        """
+        for oneClub in self._clubs[clubType]:
+            currentLabel = oneClub._label
+            # NEXT club
+            if newLabel[0] > currentLabel[0]:
+                # the newClub must not be longer than the next club with lower loft.
+                if float(newClub.loft) < float(oneClub.loft):
+                    if newClub.length > oneClub.length:
+                        raise EquipmentRuleException('New Club must not be longer than the next club with lower loft')
+                # the newClub must not be shorter than the next club with higher loft.
+                elif float(newClub.loft) > float(oneClub.loft):
+                    if newClub.length < oneClub.length:
+                        raise EquipmentRuleException('New Club must not be shorter than the next club with lower loft')
+
+        self._clubs[clubType] += [newClub]
+
+    def remove(self, label):
+        """
+        find the matching Club object and remove it from the collection _clubs.
+        raise EquipmentRuleException with message stating there is no such club.
+        """
+        for k, v in self._clubs.items():
+            for i in v:
+                if label == i._label:
+                    print('TEST:', label, '==', i._label)
+                    self._clubs[k].pop()
+                    return
+        raise EquipmentRuleException('No exiting label!')
+
+    def saveToFile(self):
+        fileName = f'{self._ownerID}-{self._owner}.txt'
+        # outfile = open(fileName, 'w')
+
+        for k, v in self._clubs.items():
+            for i in v:
+                print(i)
+
+        pass
+
+    def getGolfSetDetails(self):
+        pass
+
+    def __str__(self):
+        text = ''
+        for oneValue in self._clubs.values():
+            for i in oneValue:
+                text += '{}\n'.format(i)
+        return text
 
 
 def main():
+    g = GolfSet('A20', 'Marvin', False)
+    print(g)
+
+    print('No. of clubs:', g.numberOfClubs)
+
+    print(g.getClubType())
+
+    # ADD
+    head = WoodHead(17.5, 240, 280)
+    shaft = Shaft(41.5, 85, 'Graphite', 'R')
+    grip = Grip(0.6, 62, 'Rubber')
+    newClub = Club('6-WOOD', head, shaft, grip)
+    g.add('Wood', newClub)
+    print('AFTER ADD..')
+    print(g)
+
+    # REMOVE
+    try:
+        g.remove('6-WOOD')
+        print('AFTER REMOVE..')
+        print(g)
+    except EquipmentRuleException as e:
+        print(e)
+
+    print('TESTING NOW!!')
+    g.saveToFile()
+
+    """
+    # Question 1
+    p = PutterHead(3.5, 365, 'Blade')
+    print(p, p.getHeight())
+    i = IronHead(37.5, 285, 'Forged')
+    print(i, i.getHeight())
+    w = WoodHead(9.5, 206, 450)
+    print(w, w.getHeight())
+    
+    
+    # Question 2
     # 2d.i
     try:
-        grip = Grip(0.6, 62, 'rubber'.upper())
+        grip = Grip(0.6, 62, 'Rubber')
         gClub1 = Club('Driver', WoodHead(10.5, 203, 450),
                       Shaft(45, 68, 'Graphite', 'S'), grip)
         gClub2 = Club('8-iron', IronHead(34.5, 268, 'Cast'),
@@ -250,13 +445,13 @@ def main():
         print(gClub3.weight)
         print(gClub4.weight)
     except EquipmentRuleException as e:
-        print(e)  # print
+        print(e)
     except Exception as e:
         print('Something unexpected..', e)
 
     # 2d.ii
     try:
-        newGrip = Grip(0.58, 75, 'leather'.upper())
+        newGrip = Grip(0.58, 75, 'Leather')
         gClub1.changeGrip(newGrip)
         gClub2.changeGrip(newGrip)
         gClub3.changeGrip(newGrip)
@@ -269,59 +464,9 @@ def main():
     except EquipmentRuleException as e:
         print(e)
     except Exception as e:
-        print('Something unexpected..', e)  # print
+        print('Something unexpected..', e)
+        
+    """
 
 
-class GolfSet:
-    _CLUBTYPE = ['Wood', 'Iron', 'Putter']
-
-    def __init__(self, ownerID, owner, newSet):
-        self._ownerID = ownerID
-        self._owner = owner
-        self._clubs = {"Wood": [], "Iron": [], "Putter": []}
-
-        if newSet is True:
-            return
-        # populate Club objects into _clubs
-        else:
-            fileName = f'/Users/haydengoh/VS Code/ICT162/TMA/{ownerID}-{owner}.txt'
-            if not fileName:
-                raise EquipmentRuleException('File is not file!')
-
-            infile = open(fileName, 'r')
-            for oneLine in infile:
-                newList = []
-                newList.append(oneLine.split(','))
-                # store in _clubs
-                self._clubs[newList[0][1]] = [
-                    newList[0][2], newList[0][3], newList[0][4]]
-
-            infile.close()
-
-    @property
-    def owner(self):
-        return self._owner
-
-    @property
-    def numberOfClubs(self):
-        """
-        sum of all clubs in the 3 categories of golf clubs.
-        """
-        return Counter(self._clubs.keys())
-
-    @classmethod
-    def getClubType(cls):
-        pass
-
-    def __str__(self):
-        return "{}".format(self._clubs)
-
-
-def main():
-    g = GolfSet('A20', 'Marvin', False)
-    print(g)
-
-    print(g.numberOfClubs)
-
-
-# main()
+main()
