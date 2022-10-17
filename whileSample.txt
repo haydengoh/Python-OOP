@@ -1,0 +1,29 @@
+def whileSamples():
+    # while example 1
+    stop = input("(R)epeat or (S)top : ")
+    while stop not in "Ss":
+        # some code to repeat here
+        print("ok, let's repeat one more time")
+        stop = input("(R)epeat or (S)top : ")
+
+    print("Done#1 !!")
+
+    # while example 2
+    while True:
+        stop = input("(R)epeat or (S)top : ")
+        if stop in "Ss":
+            break
+        else:
+            # some code to repeat here
+            print("ok, let's repeat one more time")
+
+    print("Done#2 !!")
+
+    # while example 3
+    while True:
+        # some code to repeat here
+        stop = input("(R)epeat or (S)top : ")
+        if stop in "Ss":
+            break
+
+    print("Done#3 !!")
