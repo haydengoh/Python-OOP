@@ -195,7 +195,7 @@ class Club:
         """
         Weight of the club is the total weight of clubhead, shaft and grip.
         """
-        return self._head.weight + self._shaft.weight + self._grip.weight
+        return int(self._head.weight) + int(self._shaft.weight) + int(self._grip.weight)
 
     def changeGrip(self, newGrip: Grip):
         """
@@ -236,7 +236,7 @@ class GolfSet:
         if newSet is True:
             return
         else:
-            fileName = r'C:\Users\HAYDEN.GOH\IdeaProjects\HelloPython\TMA\A20-Marvin.txt'
+            fileName = f'C:/Users/HAYDEN.GOH/IdeaProjects/HelloPython/TMA/{self._ownerID}-{self._owner}.txt'
             if not os.path.isfile(fileName):
                 raise EquipmentRuleException('File is not file!')
 
@@ -370,17 +370,30 @@ class GolfSet:
         raise EquipmentRuleException('No exiting label!')
 
     def saveToFile(self):
-        fileName = f'{self._ownerID}-{self._owner}.txt'
-        # outfile = open(fileName, 'w')
+        """
+        construct a filename using “ownerID-owner.txt”.
+        write the updated golf set specifications into the file.
+        """
+        fileName = f'C:/Users/HAYDEN.GOH/IdeaProjects/HelloPython/TMA/{self._ownerID}-{self._owner}.txt'
+        outfile = open(fileName, 'w')
 
         for k, v in self._clubs.items():
-            for i in v:
-                print(i)
+            for oneLine in v:
+                outfile.write(oneLine.__str__())
+                outfile.write('\n')
 
-        pass
+        outfile.close()
 
     def getGolfSetDetails(self):
-        pass
+        """
+        returns a string presentation the golf set, including the count of clubs in this golf set
+        """
+        newString = ''
+        for k, v in self._clubs.items():
+            for oneValue in v:
+                newString += (oneValue.getDetails() + '\n')
+        newString += 'No of clubs: ' + self.numberOfClubs.__str__()
+        return newString
 
     def __str__(self):
         text = ''
@@ -415,8 +428,16 @@ def main():
     except EquipmentRuleException as e:
         print(e)
 
-    print('TESTING NOW!!')
+    # WRITE
     g.saveToFile()
+    print('AFTER WRITE..')
+    print(g)
+
+    # getGolfSetDetails()
+    print('AFTER getGolfSetDetails()..')
+    print(g.getGolfSetDetails())
+
+
 
     """
     # Question 1
