@@ -215,7 +215,7 @@ EquipmentRuleException with appropriate message.
         """
         getDetails method returns a string presentation of the club’s label, loft, length, flex, and weight
         """
-        return "Club: {:10} Loft: {:4} Length: {:6}in Flex: {:1} Weight: {:10}g".format(self._label, self.loft,
+        return "Club: {:10} Loft: {:4} Length: {:6,.2f}in Flex: {:1} Weight: {:3}g".format(self._label, self.loft,
                                                                                         self.length, self.flex,
                                                                                         self.weight)
 
@@ -414,6 +414,27 @@ def menuOption():
     return option
 
 
+def subMenuOption(owner):
+    print('Club Fitting for {}'.format(owner))
+    print('==========================')
+    print('1. Add a club')
+    print('2. Remove a club')
+    print('0. Back to Main Menu')
+    option = getIntegerRange("SUB: Enter choice: ", 0, 2)
+    return option
+
+
+def subMenu(owner, golfSet):
+    while True:
+        option = subMenuOption(owner)
+        if option == 0:
+            break
+        elif option == 1:
+            addClub(golfSet)
+        else:
+            removeClub(golfSet)
+
+
 def buildGolfSet():
     try:
         ownerID = input('Enter golfer\'s ID: ')
@@ -450,27 +471,6 @@ def loadGolfSet():
         print(e)
 
 
-def subMenuOption(owner):
-    print('Club Fitting for {}'.format(owner))
-    print('==========================')
-    print('1. Add a club')
-    print('2. Remove a club')
-    print('0. Back to Main Menu')
-    option = getIntegerRange("SUB: Enter choice: ", 0, 2)
-    return option
-
-
-def subMenu(owner, golfSet):
-    while True:
-        option = subMenuOption(owner)
-        if option == 0:
-            break
-        elif option == 1:
-            addClub(golfSet)
-        else:
-            removeClub(golfSet)
-
-
 def removeClub(golfSet):
     try:
         label = input('Enter the club label to remove: ').upper()
@@ -478,6 +478,7 @@ def removeClub(golfSet):
             print('Removal done...\n')
             print(golfSet._ownerID, golfSet.owner)
             print(golfSet.getGolfSetDetails())
+            golfSet.saveToFile()
     except EquipmentRuleException:
         print('Cannot remove as {} is not in set\n'.format(label))
         print(golfSet._ownerID, golfSet.owner)
@@ -546,8 +547,10 @@ def addClub(golfSet):
         Display any error or confirmation messages for this add request, then return to
     the sub menu.
         """
-        print('New Club added\n\n')
+        print('New Club added\n')
+        print(golfSet._ownerID, golfSet.owner)
         print(golfSet.getGolfSetDetails())
+        golfSet.saveToFile()
     except EquipmentRuleException as e:
         print(e)
     except Exception as e:
