@@ -233,12 +233,15 @@ class GolfSet:
         self._owner = owner
         self._clubs = {"Wood": [], "Iron": [], "Putter": []}
 
+        fileName = f'C:/Users/HAYDEN.GOH/IdeaProjects/HelloPython/TMA/{self._ownerID}-{self._owner}.txt'
         if newSet is True:
+            # additional implementation to check if golfer exist
+            if os.path.isfile(fileName):
+                raise EquipmentRuleException('Existing golfer exist!')
             return
         else:
-            fileName = f'C:/Users/HAYDEN.GOH/IdeaProjects/HelloPython/TMA/{self._ownerID}-{self._owner}.txt'
             if not os.path.isfile(fileName):
-                raise EquipmentRuleException('File is not file!')
+                raise EquipmentRuleException('File is not found!')
 
             infile = open(fileName, 'r')
             for oneLine in infile:
@@ -557,6 +560,7 @@ def addClub(golfSet):
 
 
 def main():
+    # Question 3
     while True:
         option = menuOption()
         if option == 0:
