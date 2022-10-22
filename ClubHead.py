@@ -1,6 +1,6 @@
 import os
 from abc import ABC, abstractmethod
-from myLib import getIntegerRange, getClubType
+from myLib import getIntegerRange, getClub
 
 
 class EquipmentRuleException(Exception):
@@ -496,7 +496,7 @@ def removeClub(golfSet):
 def addClub(golfSet):
     try:
         """
-        clubType = getClubType('Which club type to add: ', golfSet.getClubType())
+        clubType = getClub('Which club type to add: ', golfSet.getClubType())
         label = input('Enter the new club label: ').upper()
         # Club Head
         loft = input('Enter clubhead loft: ')
