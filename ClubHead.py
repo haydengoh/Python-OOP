@@ -170,6 +170,10 @@ class Club:
                 'Assembled club length must be within 18 to 48 inches')
 
     @property  # accessor / getter method
+    def label(self):
+        return self._label
+
+    @property  # accessor / getter method
     def loft(self):
         """
         Loft of the club refers to the loft of the clubhead.
@@ -237,7 +241,7 @@ class GolfSet:
         if newSet is True:
             # additional implementation to check if golfer exist
             if os.path.isfile(fileName):
-                raise EquipmentRuleException('Existing golfer exist!')
+                raise EquipmentRuleException('ID/name is used!')
             return
         else:
             if not os.path.isfile(fileName):
@@ -366,11 +370,11 @@ class GolfSet:
         """
         for k, v in self._clubs.items():
             for i in v:
-                if label == i._label:
-                    print('TEST:', label, '==', i._label)
+                if label == i.label:
+                    # print('TEST:', label, '==', i.label)
                     self._clubs[k].pop()
                     return True
-        raise EquipmentRuleException('No exiting label!')
+        raise EquipmentRuleException('No existing label!')
 
     def saveToFile(self):
         """
@@ -492,7 +496,7 @@ def removeClub(golfSet):
 def addClub(golfSet):
     try:
         """
-        clubType = getClubType('Which club type to add: ', golfSet._CLUBTYPE)
+        clubType = getClubType('Which club type to add: ', golfSet.getClubType())
         label = input('Enter the new club label: ').upper()
         # Club Head
         loft = input('Enter clubhead loft: ')
