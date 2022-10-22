@@ -28,7 +28,7 @@ def getCharSet(prompt, charSet):
         print("Sorry, please re-enter within ({})".format(charSet))
 
 
-def getClubType(prompt, stringSet):
+def getClub(prompt, stringSet):
     while True:
         value = input(prompt).title()
 
