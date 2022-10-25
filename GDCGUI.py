@@ -107,6 +107,12 @@ class GDCGUI_GRID:
             loft = float(self._cLoft.get())
             swingSpeed = float(self._ss.get())
 
+            # kph/cm
+            if self._spdValue.get() == 1:
+                swingSpeed = swingSpeed * 0.621371
+            if self._lengthValue.get() == 1:
+                length = length * 0.393701
+
             """
             Ensure swing speed is a positive number.
             Ensure length must be within 30 to 48 inches.
@@ -115,13 +121,6 @@ class GDCGUI_GRID:
             if (swingSpeed < 0) or (length < 30) or (length > 48) or (loft < 8) or (loft > 64):
                 raise Exception
 
-            if self._spdValue.get() == 1:
-                swingSpeed = swingSpeed * 0.621371
-
-            if self._lengthValue.get() == 1:
-                length = length * 0.393701
-
-            # length (inches), SwingSpeed (mph)
             distance = (280 - abs(length-48)*10 -
                         abs(loft-10)*1.25) * swingSpeed/96
             self._scrol_stxt.insert(
@@ -137,7 +136,7 @@ class GDCGUI_GRID:
             self._scrol_stxt.config(state=tk.DISABLED)
             # enable clear button
             self._clear_btn.config(state=tk.NORMAL)
-
+            """
             # clear the 3 text fields
             self._ss.set("")
             self._cLength.set("")
@@ -145,6 +144,7 @@ class GDCGUI_GRID:
 
             # focus
             self._ss_Ety.focus()
+            """
 
     def clear(self):
         # enable ScrolledText
