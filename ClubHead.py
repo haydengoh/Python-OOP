@@ -149,10 +149,7 @@ order: diameter, weight, material
 
 
 class Club:
-
     def __init__(self, label, head: ClubHead, shaft: Shaft, grip: Grip):
-        # labelling or numbering in uppercase, to help golfers identify the club.
-        # For example, “7-IRON”, “3-WOOD” and “4-HYBRID”.
         self._label = label
         self._head = head
         self._shaft = shaft
@@ -219,8 +216,8 @@ EquipmentRuleException with appropriate message.
         getDetails method returns a string presentation of the club’s label, loft, length, flex, and weight
         """
         return "Club: {:10} Loft: {:4} Length: {:6,.2f}in Flex: {:1} Weight: {:3}g".format(self._label, self.loft,
-                                                                                        self.length, self.flex,
-                                                                                        self.weight)
+                                                                                           self.length, self.flex,
+                                                                                           self.weight)
 
     def __str__(self):
         """
@@ -237,7 +234,7 @@ class GolfSet:
         self._owner = owner
         self._clubs = {"Wood": [], "Iron": [], "Putter": []}
 
-        fileName = f'C:/Users/HAYDEN.GOH/IdeaProjects/HelloPython/TMA/{self._ownerID}-{self._owner}.txt'
+        fileName = f'/Users/haydengoh/VS Code/ICT162/TMA/{self._ownerID}-{self._owner}.txt'
         if newSet is True:
             # additional implementation to check if golfer exist
             if os.path.isfile(fileName):
@@ -266,16 +263,20 @@ class GolfSet:
                 category = newList[0][1]
                 if category == 'Wood':
                     # WoodHead(loft, weight, size)
-                    head = WoodHead(newList[0][2], newList[0][3], newList[0][4])
+                    head = WoodHead(
+                        newList[0][2], newList[0][3], newList[0][4])
                 elif category == 'Iron':
                     # IronHead(loft, weight, material)
-                    head = IronHead(newList[0][2], newList[0][3], newList[0][4])
+                    head = IronHead(
+                        newList[0][2], newList[0][3], newList[0][4])
                 else:
                     # PutterHead(loft, weight, style)
-                    head = PutterHead(newList[0][2], newList[0][3], newList[0][4])
+                    head = PutterHead(
+                        newList[0][2], newList[0][3], newList[0][4])
 
                 # Shaft(length, weight, material, flex)
-                shaft = Shaft(newList[0][5], newList[0][6], newList[0][7], newList[0][8])
+                shaft = Shaft(newList[0][5], newList[0][6],
+                              newList[0][7], newList[0][8])
                 # Grip(diameter, weight, material)
                 grip = Grip(newList[0][9], newList[0][10], newList[0][11])
                 # Club(label, head: ClubHead, shaft: Shaft, grip: Grip)
@@ -317,7 +318,8 @@ class GolfSet:
     def add(self, clubType, newClub: Club):
         # The maximum number of clubs in a golf set is 14.
         if self.numberOfClubs >= 14:
-            raise EquipmentRuleException('Maximum number of clubs in a golf set is 14!')
+            raise EquipmentRuleException(
+                'Maximum number of clubs in a golf set is 14!')
 
         # Each club label should be unique, within the golf set.
         newLabel = newClub._label
@@ -330,15 +332,17 @@ class GolfSet:
         newFlex = newClub.flex
         for oneClub in self._clubs[clubType]:
             currentFlex = oneClub.flex
-            if newFlex is not currentFlex:
-                raise EquipmentRuleException('New flex must match those in the same clubType category!')
+            if newFlex[0] is not currentFlex[0]:
+                raise EquipmentRuleException(
+                    'New flex must match those in the same clubType category!')
 
         # Within the same clubType category, there should not be clubs having the same loft.
         newLoft = newClub.loft
         for oneClub in self._clubs[clubType]:
             currentLoft = oneClub.loft
             if newLoft == currentLoft:
-                raise EquipmentRuleException('Should not have same loft within same clubType category!')
+                raise EquipmentRuleException(
+                    'Should not have same loft within same clubType category!')
 
         """
         Within the same clubType category,
@@ -355,11 +359,13 @@ class GolfSet:
                 # the newClub must not be longer than the next club with lower loft.
                 if float(newClub.loft) < float(oneClub.loft):
                     if newClub.length > oneClub.length:
-                        raise EquipmentRuleException('New Club must not be longer than the next club with lower loft')
+                        raise EquipmentRuleException(
+                            'New Club must not be longer than the next club with lower loft')
                 # the newClub must not be shorter than the next club with higher loft.
                 elif float(newClub.loft) > float(oneClub.loft):
                     if newClub.length < oneClub.length:
-                        raise EquipmentRuleException('New Club must not be shorter than the next club with lower loft')
+                        raise EquipmentRuleException(
+                            'New Club must not be shorter than the next club with lower loft')
 
         self._clubs[clubType] += [newClub]
 
@@ -368,20 +374,27 @@ class GolfSet:
         find the matching Club object and remove it from the collection _clubs.
         raise EquipmentRuleException with message stating there is no such club.
         """
+        search = False
         for k, v in self._clubs.items():
             for i in v:
                 if label == i.label:
-                    # print('TEST:', label, '==', i.label)
-                    self._clubs[k].pop()
-                    return True
-        raise EquipmentRuleException('No existing label!')
+                    search = True
+                    # print('TEST: [{}] == [{}]'.format(label, i.label))
+                    if self._clubs[k].remove(i):
+                        break
+            else:
+                continue
+            break
+
+        if search == False:
+            raise EquipmentRuleException('No existing label!')
 
     def saveToFile(self):
         """
         construct a filename using “ownerID-owner.txt”.
         write the updated golf set specifications into the file.
         """
-        fileName = f'C:/Users/HAYDEN.GOH/IdeaProjects/HelloPython/TMA/{self._ownerID}-{self._owner}.txt'
+        fileName = f'/Users/haydengoh/VS Code/ICT162/TMA/{self._ownerID}-{self._owner}.txt'
         outfile = open(fileName, 'w')
 
         for k, v in self._clubs.items():
@@ -426,7 +439,7 @@ def subMenuOption(owner):
     print('1. Add a club')
     print('2. Remove a club')
     print('0. Back to Main Menu')
-    option = getIntegerRange("SUB: Enter choice: ", 0, 2)
+    option = getIntegerRange("Enter choice: ", 0, 2)
     return option
 
 
@@ -463,10 +476,10 @@ def buildGolfSet():
 
 def loadGolfSet():
     try:
-        # golferID = input('Enter golfer\'s ID: ')
-        # name = input('Enter golfer\'s name: ')
-        ownerID = 'A20'
-        owner = 'Marvin'
+        ownerID = input('Enter golfer\'s ID: ')
+        owner = input('Enter golfer\'s name: ')
+        # ownerID = 'A20'
+        # owner = 'Marvin'
         golfSet = GolfSet(ownerID, owner, False)
         print('{} {}'.format(ownerID, owner))
         print(golfSet.getGolfSetDetails())
@@ -477,14 +490,14 @@ def loadGolfSet():
         print(e)
 
 
-def removeClub(golfSet):
+def removeClub(golfSet: GolfSet):
     try:
         label = input('Enter the club label to remove: ').upper()
-        if golfSet.remove(label):
-            print('Removal done...\n')
-            print(golfSet._ownerID, golfSet.owner)
-            print(golfSet.getGolfSetDetails())
-            golfSet.saveToFile()
+        golfSet.remove(label)
+        print('Removal done...\n')
+        print(golfSet._ownerID, golfSet.owner)
+        print(golfSet.getGolfSetDetails())
+        golfSet.saveToFile()
     except EquipmentRuleException:
         print('Cannot remove as {} is not in set\n'.format(label))
         print(golfSet._ownerID, golfSet.owner)
@@ -495,7 +508,6 @@ def removeClub(golfSet):
 
 def addClub(golfSet):
     try:
-        """
         clubType = getClub('Which club type to add: ', golfSet.getClubType())
         label = input('Enter the new club label: ').upper()
         # Club Head
@@ -543,7 +555,7 @@ def addClub(golfSet):
         gripWeight = 62
         gripMaterial = 'Rubber'
         grip = Grip(diameter, gripWeight, gripMaterial)
-
+        """
         # Club Object
         newClub = Club(label, clubHead, shaft, grip)
 
@@ -576,50 +588,14 @@ def main():
     print("bye")
 
     """
-    g = GolfSet('A20', 'Marvin', False)
-    print(g)
-
-    print('No. of clubs:', g.numberOfClubs)
-
-    print(g.getClubType())
-
-    # ADD
-    head = WoodHead(17.5, 240, 280)
-    shaft = Shaft(41.5, 85, 'Graphite', 'R')
-    grip = Grip(0.6, 62, 'Rubber')
-    newClub = Club('6-WOOD', head, shaft, grip)
-    g.add('Wood', newClub)
-    print('AFTER ADD..')
-    print(g)
-
-    # REMOVE
-    try:
-        g.remove('6-WOOD')
-        print('AFTER REMOVE..')
-        print(g)
-    except EquipmentRuleException as e:
-        print(e)
-
-    # WRITE
-    g.saveToFile()
-    print('AFTER WRITE..')
-    print(g)
-
-    # getGolfSetDetails()
-    print('AFTER getGolfSetDetails()..')
-    print(g.getGolfSetDetails())
-    """
-
-    """
     # Question 1
     p = PutterHead(3.5, 365, 'Blade')
-    print(p, p.getHeight())
     i = IronHead(37.5, 285, 'Forged')
-    print(i, i.getHeight())
     w = WoodHead(9.5, 206, 450)
+    print(p, p.getHeight())
+    print(i, i.getHeight())
     print(w, w.getHeight())
-    
-    
+
     # Question 2
     # 2d.i
     try:
@@ -657,8 +633,42 @@ def main():
         print(e)
     except Exception as e:
         print('Something unexpected..', e)
-        
     """
 
+    """
+    # TESTING.. 
+    g = GolfSet('A20', 'Marvin', False)
+    print(g)
+
+    print('No. of clubs:', g.numberOfClubs)
+
+    print(g.getClubType())
+
+    # ADD
+    head = WoodHead(17.5, 240, 280)
+    shaft = Shaft(41.5, 85, 'Graphite', 'R')
+    grip = Grip(0.6, 62, 'Rubber')
+    newClub = Club('6-WOOD', head, shaft, grip)
+    g.add('Wood', newClub)
+    print('AFTER ADD..')
+    print(g)
+
+    # REMOVE
+    try:
+        g.remove('6-WOOD')
+        print('AFTER REMOVE..')
+        print(g)
+    except EquipmentRuleException as e:
+        print(e)
+
+    # WRITE
+    g.saveToFile()
+    print('AFTER WRITE..')
+    print(g)
+
+    # getGolfSetDetails()
+    print('AFTER getGolfSetDetails()..')
+    print(g.getGolfSetDetails())
+    """
 
 main()
